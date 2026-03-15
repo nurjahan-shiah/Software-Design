@@ -1,0 +1,7 @@
+userID,name,email,password,userType,staffID,status,department
+U001,Alice Student,alice@yorku.ca,pass123,STUDENT,S12345,ACTIVE,Engineering
+U002,Bob Faculty,bob@yorku.ca,pass123,FACULTY,F67890,ACTIVE,Science
+U003,Carol Researcher,carol@yorku.ca,pass123,RESEARCHER,R11111,ACTIVE,Research
+U004,Dave Guest,dave@example.com,pass123,GUEST,CERT-999,ACTIVE,External
+M001,Manager Mike,manager@yorku.ca,manager123,MANAGER,MGR-001,ACTIVE,Engineering
+C001,Coordinator Carol,coord@yorku.ca,coord123,COORDINATOR,COORD-001,ACTIVE,Administration

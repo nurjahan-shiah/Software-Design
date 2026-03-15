@@ -1,0 +1,3 @@
+bookingID,userID,equipmentID,startTime,endTime,status,depositAmount,depositForfeited,paymentMethod,isExtended
+B001,U001,EQ001,2026-03-20 09:00,2026-03-20 11:00,CONFIRMED,10.0,false,CREDIT,false
+B002,U002,EQ004,2026-03-21 14:00,2026-03-21 16:00,CONFIRMED,15.0,false,INSTITUTIONAL,false

@@ -1,0 +1,6 @@
+equipmentID,name,description,type,status,buildingName,roomNumber
+EQ001,Oscilloscope,Digital oscilloscope 200MHz,Electronics,AVAILABLE,Lassonde,101
+EQ002,3D Printer,FDM 3D printer,Fabrication,AVAILABLE,Bergeron,202
+EQ003,Laser Cutter,CO2 laser cutter,Fabrication,MAINTENANCE,Lassonde,103
+EQ004,Spectrometer,UV-Vis spectrometer,Optics,AVAILABLE,Petrie,305
+EQ005,CNC Machine,3-axis CNC milling machine,Fabrication,DISABLED,Bergeron,204
