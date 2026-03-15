@@ -4,11 +4,13 @@ import model.Reservation;
 
 public class ModifyCommand implements Command {
 
+    private ReservationService reservationService;
     private Reservation reservation;
     private String newStartTime;
     private String newEndTime;
 
-    public ModifyCommand(Reservation reservation, String newStartTime, String newEndTime) {
+    public ModifyCommand(ReservationService reservationService, Reservation reservation, String newStartTime, String newEndTime) {
+        this.reservationService = reservationService;
         this.reservation = reservation;
         this.newStartTime = newStartTime;
         this.newEndTime = newEndTime;
@@ -16,8 +18,6 @@ public class ModifyCommand implements Command {
 
     @Override
     public void execute() {
-        reservation.setStartTime(newStartTime);
-        reservation.setEndTime(newEndTime);
-        System.out.println("Reservation modified.");
+        reservationService.modify(reservation, newStartTime, newEndTime);
     }
 }
