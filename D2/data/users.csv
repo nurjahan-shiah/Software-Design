@@ -5,3 +5,5 @@ U003,Carol Researcher,carol@yorku.ca,pass123,RESEARCHER,R11111,ACTIVE,Research
 U004,Dave Guest,dave@example.com,pass123,GUEST,CERT-999,ACTIVE,External
 M001,Manager Mike,manager@yorku.ca,manager123,MANAGER,MGR-001,ACTIVE,Engineering
 C001,Coordinator Carol,coord@yorku.ca,coord123,COORDINATOR,COORD-001,ACTIVE,Administration
+U1773892952781,shiah,shiah@gmail.com,Ilham123,STUDENT,123,PENDING,eecs
+U1773922455105,Jane Doe,jane@yorku.ca,pass123,FACULTY,S12345,PENDING,Engineering
