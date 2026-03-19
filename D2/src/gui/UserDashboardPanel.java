@@ -107,7 +107,7 @@ public class UserDashboardPanel extends JPanel {
         form.add(payCombo, gc);
 
         gc.gridx=6;
-        JButton resBtn = UI.button("Reserve Selected", UI.ACCENT);
+        JButton resBtn = UI.button("Reserve Selected", UI.YORKU_RED);
         resBtn.addActionListener(e -> reserve());
         form.add(resBtn, gc);
 
@@ -143,7 +143,7 @@ public class UserDashboardPanel extends JPanel {
         extendField.setPreferredSize(new Dimension(160, 32));
         actions.add(extendField);
 
-        JButton extBtn = UI.button("Extend Reservation (Req9)", UI.ACCENT);
+        JButton extBtn = UI.button("Extend Reservation (Req9)", UI.YORKU_RED);
         extBtn.addActionListener(e -> extend());
         actions.add(extBtn);
 

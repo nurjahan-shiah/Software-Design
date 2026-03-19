@@ -71,7 +71,7 @@ public class CoordinatorDashboardPanel extends ManagerDashboardPanel {
 
         JPanel btns = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 8));
         btns.setBackground(UI.BG);
-        JButton refresh = UI.button("↻ Refresh", UI.ACCENT);
+        JButton refresh = UI.button("↻ Refresh", UI.YORKU_RED);
         refresh.addActionListener(e -> refreshAllUsers());
 
         JButton approve = UI.button("✔ Approve Selected", UI.SUCCESS);
@@ -104,7 +104,7 @@ public class CoordinatorDashboardPanel extends ManagerDashboardPanel {
         genDept  = addField(form, "Department");
 
         form.add(Box.createVerticalStrut(8));
-        JButton gen = UI.button("Generate Manager Account", UI.ACCENT);
+        JButton gen = UI.button("Generate Manager Account", UI.YORKU_RED);
         gen.setAlignmentX(Component.LEFT_ALIGNMENT);
         gen.addActionListener(e -> generateManager());
         form.add(gen);

@@ -89,7 +89,7 @@ public class ManagerDashboardPanel extends JPanel {
         btns.setBackground(UI.BG);
         JButton approve = UI.button("✔ Approve", UI.SUCCESS);
         JButton reject  = UI.button("✘ Reject",  UI.DANGER);
-        JButton refresh = UI.button("↻ Refresh", UI.ACCENT);
+        JButton refresh = UI.button("↻ Refresh", UI.YORKU_RED);
         approve.addActionListener(e -> approve());
         reject.addActionListener(e -> reject());
         refresh.addActionListener(e -> refreshPending());
@@ -134,7 +134,7 @@ public class ManagerDashboardPanel extends JPanel {
         eqBuilding = addField(form, "Building Name (required — Req7)");
         eqRoom     = addField(form, "Room Number (required — Req7)");
         form.add(Box.createVerticalStrut(12));
-        JButton add = UI.button("Add Equipment", UI.ACCENT);
+        JButton add = UI.button("Add Equipment", UI.YORKU_RED);
         add.setAlignmentX(Component.LEFT_ALIGNMENT);
         add.addActionListener(e -> addEquipment());
         form.add(add);
@@ -157,7 +157,7 @@ public class ManagerDashboardPanel extends JPanel {
         bookTable = UI.styledTable(bookModel);
         p.add(new JScrollPane(bookTable), BorderLayout.CENTER);
 
-        JButton refresh = UI.button("↻ Refresh", UI.ACCENT);
+        JButton refresh = UI.button("↻ Refresh", UI.YORKU_RED);
         refresh.addActionListener(e -> refreshAllBookings());
         JPanel btns = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 8));
         btns.setBackground(UI.BG);
