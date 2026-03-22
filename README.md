@@ -369,7 +369,7 @@ CSV Storage      data/*.csv
 ```
 ---
 
-D2 Contribution Table: [Code contribution can be found under the Contribution tab in GitHub]
+D2 Contribution Table: [Code contribution can be found under the Insights > Contributors tab in GitHub]
 | Member | Contributions |
 |---|---|
 | Nurjahan Ahmed Shiah | D2 project structure (Models + CSV layer (model/, data/): User, Equipment, Reservation + all CSV read/write), GUI ×3, project setup, README, D2(1a[Justification for the Six Design Patterns], 1d[Component Diagram])|
