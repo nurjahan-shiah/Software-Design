@@ -24,24 +24,24 @@ public class UserDAO {
     public void load() throws Exception {
         users.clear();
         CsvReader reader = new CsvReader(path);
-        reader.readHeaders();
-
-        while (reader.readRecord()) {
-            String userType = reader.get("userType");
-            User user = createUser(userType);
-
-            user.setUserID(reader.get("userID"));
-            user.setName(reader.get("name"));
-            user.setEmail(reader.get("email"));
-            user.setPassword(reader.get("password"));
-            user.setUserType(userType);
-            user.setStaffID(reader.get("staffID"));
-            user.setStatus(reader.get("status"));
-            user.setDepartment(reader.get("department"));
-
-            users.add(user);
+        try {
+            reader.readHeaders();
+            while (reader.readRecord()) {
+                String userType = reader.get("userType");
+                User user = createUser(userType);
+                user.setUserID(reader.get("userID"));
+                user.setName(reader.get("name"));
+                user.setEmail(reader.get("email"));
+                user.setPassword(reader.get("password"));
+                user.setUserType(userType);
+                user.setStaffID(reader.get("staffID"));
+                user.setStatus(reader.get("status"));
+                user.setDepartment(reader.get("department"));
+                users.add(user);
+            }
+        } finally {
+            reader.close();
         }
-        reader.close();
     }
 
     public void save() throws Exception {
@@ -111,13 +111,13 @@ public class UserDAO {
     // Factory helper - creates the right subclass based on userType string
     private User createUser(String userType) {
         switch (userType.toUpperCase()) {
-            case "STUDENT":    return new Student();
-            case "FACULTY":    return new Faculty();
-            case "RESEARCHER": return new Researcher();
-            case "GUEST":      return new Guest();
-            case "MANAGER":    return new LabManager();
+            case "STUDENT":     return new Student();
+            case "FACULTY":     return new Faculty();
+            case "RESEARCHER":  return new Researcher();
+            case "GUEST":       return new Guest();
+            case "MANAGER":     return new LabManager();
             case "COORDINATOR": return new HeadLabCoordinator();
-            default:           return new Student();
+            default:            return new Student();
         }
     }
 }

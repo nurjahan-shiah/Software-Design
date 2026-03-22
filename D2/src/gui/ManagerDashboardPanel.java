@@ -16,9 +16,10 @@ public class ManagerDashboardPanel extends JPanel {
     private MainFrame frame;
     protected User currentUser;
 
-    protected EquipmentDAO equipDAO = new EquipmentDAO("../data/equipment.csv");
-    protected UserDAO userDAO       = new UserDAO("../data/users.csv");
-    protected BookingDAO bookDAO    = new BookingDAO("../data/bookings.csv");
+    private static final String DATA = "C:/Users/nshia/Desktop/PEW/FW25-26/EECS3311/D2/LabReservationSystem/LabReservationSystem/Software-Design/D2/data/";
+    protected EquipmentDAO equipDAO = new EquipmentDAO(DATA + "equipment.csv");
+    protected UserDAO userDAO       = new UserDAO(DATA + "users.csv");
+    protected BookingDAO bookDAO    = new BookingDAO(DATA + "bookings.csv");
 
     protected DefaultTableModel equipModel, pendModel, bookModel;
     protected JTable equipTable, pendTable, bookTable;

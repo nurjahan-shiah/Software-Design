@@ -5,5 +5,14 @@ U003,Carol Researcher,carol@yorku.ca,pass123,RESEARCHER,R11111,ACTIVE,Research
 U004,Dave Guest,dave@example.com,pass123,GUEST,CERT-999,ACTIVE,External
 M001,Manager Mike,manager@yorku.ca,manager123,MANAGER,MGR-001,ACTIVE,Engineering
 C001,Coordinator Carol,coord@yorku.ca,coord123,COORDINATOR,COORD-001,ACTIVE,Administration
-U1773892952781,shiah,shiah@gmail.com,Ilham123,STUDENT,123,PENDING,eecs
+U1773892952781,shiah,shiah@gmail.com,Ilham123,STUDENT,123,ACTIVE,eecs
 U1773922455105,Jane Doe,jane@yorku.ca,pass123,FACULTY,S12345,PENDING,Engineering
+U1774203314548,test,test1@gmail.com,123456,STUDENT,1234,REJECTED,eecs
+U1774205504261,shiah test,shiahT@gmail.com,123456,STUDENT,1234,REJECTED,eecs
+M002,manager test,mts@gmail.com,tempM002,MANAGER,M002,ACTIVE,eecs
+U1774209049965,shiah test,shiahTest@gmail.com,123456,STUDENT,2378,PENDING,eecs
+U1774209168036,shiah Test 2,shiahT2@gmail.com,123456,STUDENT,12345,ACTIVE,eecs
+U1774209502925,Shiah Test 4,shiahT4@yorku.ca,123456,STUDENT,1234,ACTIVE,eecs
+M003,Shiah Manager,ShiahM@yorku.ca,tempM003,MANAGER,M003,ACTIVE,eecs
+U1774210278565,Shiah Prachi,shiahp@yorku.ca,123456,STUDENT,1234,ACTIVE,eecs
+M0049,Shiah Prachi Manager,shiahpm@yorku.ca,tempM0049,MANAGER,M0049,ACTIVE,eecs

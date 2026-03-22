@@ -10,7 +10,7 @@ import pattern.factory.UserFactory;
 public class LoginPanel extends JPanel {
     private static final long serialVersionUID = 1L;
     private MainFrame frame;
-    private UserDAO userDAO = new UserDAO("../data/users.csv");
+    private UserDAO userDAO = new UserDAO("C:/Users/nshia/Desktop/PEW/FW25-26/EECS3311/D2/LabReservationSystem/LabReservationSystem/Software-Design/D2/data/users.csv");
     private JTextField emailField;
     private JPasswordField passField;
     private JTextField regName, regEmail, regStaffID, regDept;
@@ -154,7 +154,7 @@ public class LoginPanel extends JPanel {
         u.setPassword(pass); u.setUserType(type); u.setStaffID(staffID); u.setDepartment(dept);
         u.setStatus("GUEST".equals(type)?"ACTIVE":"PENDING");
         userDAO.addUser(u);
-        try { userDAO.save(); } catch (Exception e) { setStatus("Error saving account.",true); return; }
+        try { userDAO.save(); } catch (Exception e) { e.printStackTrace(); setStatus("Error saving account.",true); return; }
         setStatus("GUEST".equals(type)?"Account created! You can now sign in.":"Registration submitted — awaiting departmental approval.", false);
         regName.setText(""); regEmail.setText(""); regPass.setText(""); regStaffID.setText(""); regDept.setText("");
     }

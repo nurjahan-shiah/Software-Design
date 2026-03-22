@@ -15,15 +15,16 @@ public class UserDashboardPanel extends JPanel {
     private MainFrame frame;
     private User currentUser;
 
-    private EquipmentDAO equipDAO = new EquipmentDAO("../data/equipment.csv");
-    private BookingDAO bookDAO    = new BookingDAO("../data/bookings.csv");
+    private static final String DATA = "C:/Users/nshia/Desktop/PEW/FW25-26/EECS3311/D2/LabReservationSystem/LabReservationSystem/Software-Design/D2/data/";
+    private EquipmentDAO equipDAO = new EquipmentDAO(DATA + "equipment.csv");
+    private BookingDAO bookDAO    = new BookingDAO(DATA + "bookings.csv");
     private ReservationService svc = new ReservationService();
 
     private DefaultTableModel equipModel, bookModel;
     private JTable equipTable, bookTable;
     private JTextField startField, endField, extendField, modifyStartField, modifyEndField;
     private JComboBox<String> payCombo;
-    private JLabel status, userInfo;
+    private JLabel status, userInfo, summaryLabel;
 
     public UserDashboardPanel(MainFrame frame) {
         this.frame = frame;
@@ -128,43 +129,61 @@ public class UserDashboardPanel extends JPanel {
             BorderFactory.createLineBorder(UI.BORDER), "My Bookings"));
         p.add(scroll, BorderLayout.CENTER);
 
-        // Action buttons
-        JPanel actions = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 8));
+        // Payment summary bar
+        JPanel summaryBar = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 6));
+        summaryBar.setBackground(UI.CARD);
+        summaryBar.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(UI.BORDER),
+            BorderFactory.createEmptyBorder(4, 10, 4, 10)));
+        summaryLabel = new JLabel("Select a booking to see payment summary");
+        summaryLabel.setFont(summaryLabel.getFont().deriveFont(java.awt.Font.BOLD, 12f));
+        summaryBar.add(summaryLabel);
+        p.add(summaryBar, BorderLayout.NORTH);
+
+        // Update summary on row selection
+        bookTable.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) updateSummary();
+        });
+
+        // Action buttons — two rows so all buttons visible
+        JPanel actions = new JPanel();
+        actions.setLayout(new java.awt.GridLayout(2, 1));
         actions.setBackground(UI.CARD);
         actions.setBorder(BorderFactory.createTitledBorder(
             BorderFactory.createLineBorder(UI.BORDER), "Booking Actions (Req8, Req9, Req4)"));
 
+        JPanel row1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 6));
+        row1.setBackground(UI.CARD);
         JButton cancelBtn = UI.button("Cancel Booking (Req8)", UI.DANGER);
         cancelBtn.addActionListener(e -> cancelBooking());
-        actions.add(cancelBtn);
-
-        actions.add(new JLabel("  Modify — New Start:"));
+        row1.add(cancelBtn);
+        row1.add(new JLabel("  Modify - New Start:"));
         modifyStartField = UI.field("2026-04-10 10:00");
         modifyStartField.setPreferredSize(new Dimension(150, 32));
-        actions.add(modifyStartField);
-
-        actions.add(new JLabel("New End:"));
+        row1.add(modifyStartField);
+        row1.add(new JLabel("New End:"));
         modifyEndField = UI.field("2026-04-10 12:00");
         modifyEndField.setPreferredSize(new Dimension(150, 32));
-        actions.add(modifyEndField);
-
+        row1.add(modifyEndField);
         JButton modifyBtn = UI.button("Modify Booking (Req8)", UI.INFO);
         modifyBtn.addActionListener(e -> modifyBooking());
-        actions.add(modifyBtn);
+        row1.add(modifyBtn);
 
-        actions.add(new JLabel("  Extend to (yyyy-MM-dd HH:mm):"));
+        JPanel row2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 6));
+        row2.setBackground(UI.CARD);
+        row2.add(new JLabel("Extend to (yyyy-MM-dd HH:mm):"));
         extendField = UI.field("2026-04-10 13:00");
         extendField.setPreferredSize(new Dimension(160, 32));
-        actions.add(extendField);
-
+        row2.add(extendField);
         JButton extBtn = UI.button("Extend Reservation (Req9)", UI.YORKU_RED);
         extBtn.addActionListener(e -> extend());
-        actions.add(extBtn);
-
+        row2.add(extBtn);
         JButton forfeitBtn = UI.button("Simulate No-Show / Forfeit Deposit (Req4)", UI.WARNING);
         forfeitBtn.addActionListener(e -> forfeit());
-        actions.add(forfeitBtn);
+        row2.add(forfeitBtn);
 
+        actions.add(row1);
+        actions.add(row2);
         p.add(actions, BorderLayout.SOUTH);
         return p;
     }
@@ -179,7 +198,35 @@ public class UserDashboardPanel extends JPanel {
             });
     }
 
-    private void refreshBookings() {
+    private void updateSummary() {
+        int row = bookTable.getSelectedRow();
+        if (row < 0) { summaryLabel.setText("Select a booking to see payment summary"); return; }
+        String bkID = (String) bookModel.getValueAt(row, 0);
+        // Calculate totals across all bookings for this equipment
+        double totalPaid = 0;
+        int confirmed = 0, cancelled = 0, forfeited = 0, extended = 0;
+        for (int i = 0; i < bookModel.getRowCount(); i++) {
+            String dep = ((String) bookModel.getValueAt(i, 5)).replace("$", "");
+            try { totalPaid += Double.parseDouble(dep); } catch (Exception ex) {}
+            String st = (String) bookModel.getValueAt(i, 4);
+            if ("CONFIRMED".equals(st)) confirmed++;
+            else if ("CANCELLED".equals(st)) cancelled++;
+            else if ("FORFEITED".equals(st)) forfeited++;
+            if ("Yes".equals(bookModel.getValueAt(i, 7))) extended++;
+        }
+        // Selected booking detail
+        String selStatus = (String) bookModel.getValueAt(row, 4);
+        String selDep = ((String) bookModel.getValueAt(row, 5)).replace("$", "");
+        double selAmt = 0;
+        try { selAmt = Double.parseDouble(selDep); } catch (Exception ex) {}
+        String color = "FORFEITED".equals(selStatus) ? "#cc0000" : "CONFIRMED".equals(selStatus) ? "#1a7a1a" : "#888888";
+        summaryLabel.setText(String.format(
+            "<html>Selected: <b>%s</b> | Status: <font color='%s'><b>%s</b></font> | Deposit: <b>$%.1f</b> &nbsp;&nbsp;&nbsp; " +
+            "All Bookings — Total Paid: <b>$%.1f</b> | Confirmed: <b>%d</b> | Cancelled: <b>%d</b> | Forfeited: <b>%d</b> | Extended: <b>%d</b></html>",
+            bkID, color, selStatus, selAmt, totalPaid, confirmed, cancelled, forfeited, extended));
+    }
+
+        private void refreshBookings() {
         bookModel.setRowCount(0);
         if (currentUser == null) return;
         for (Reservation r : bookDAO.getBookingsByUser(currentUser.getUserID()))
@@ -260,14 +307,22 @@ public class UserDashboardPanel extends JPanel {
         String bkID = (String) bookModel.getValueAt(row, 0);
         Reservation r = bookDAO.findByID(bkID);
         if (r == null || !"CONFIRMED".equals(r.getStatus())) {
-            UI.setStatus(status, "Cannot extend this booking.", true); return;
+            UI.setStatus(status, "Cannot extend — select a CONFIRMED booking.", true); return;
         }
         String newEnd = extendField.getText().trim();
         if (newEnd.isEmpty()) { UI.setStatus(status, "Enter new end time.", true); return; }
+        // Req9: process payment for extension (same deposit rate as original booking)
+        double extFee = currentUser.getFeeRate();
+        String pay = r.getPaymentMethod();
+        PaymentStrategy strategy = payStrategy(pay);
+        PaymentTransaction txn = new PaymentTransaction("T" + System.currentTimeMillis(), bkID, extFee, pay);
+        if (!new PaymentProcessor(strategy).processPayment(txn)) {
+            UI.setStatus(status, "Payment failed for extension.", true); return;
+        }
         new ExtendCommand(svc, r, newEnd).execute();
         bookDAO.updateBooking(r);
         try { bookDAO.save(); } catch (Exception e) { e.printStackTrace(); }
-        UI.setStatus(status, "Booking extended to " + newEnd, false);
+        UI.setStatus(status, "Booking extended to " + newEnd + " | Extension fee: $" + extFee + " via " + pay, false);
         refreshBookings();
     }
 
