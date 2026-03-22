@@ -1,5 +1,9 @@
 {
   "java.project.referencedLibraries": [
+    "lib/javacsv.jar",
     "lib/**/*.jar"
+  ],
+  "java.project.sourcePaths": [
+    "src"
   ]
 }

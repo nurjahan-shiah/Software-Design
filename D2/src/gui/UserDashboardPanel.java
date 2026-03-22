@@ -21,7 +21,7 @@ public class UserDashboardPanel extends JPanel {
 
     private DefaultTableModel equipModel, bookModel;
     private JTable equipTable, bookTable;
-    private JTextField startField, endField, extendField;
+    private JTextField startField, endField, extendField, modifyStartField, modifyEndField;
     private JComboBox<String> payCombo;
     private JLabel status, userInfo;
 
@@ -138,6 +138,20 @@ public class UserDashboardPanel extends JPanel {
         cancelBtn.addActionListener(e -> cancelBooking());
         actions.add(cancelBtn);
 
+        actions.add(new JLabel("  Modify — New Start:"));
+        modifyStartField = UI.field("2026-04-10 10:00");
+        modifyStartField.setPreferredSize(new Dimension(150, 32));
+        actions.add(modifyStartField);
+
+        actions.add(new JLabel("New End:"));
+        modifyEndField = UI.field("2026-04-10 12:00");
+        modifyEndField.setPreferredSize(new Dimension(150, 32));
+        actions.add(modifyEndField);
+
+        JButton modifyBtn = UI.button("Modify Booking (Req8)", UI.INFO);
+        modifyBtn.addActionListener(e -> modifyBooking());
+        actions.add(modifyBtn);
+
         actions.add(new JLabel("  Extend to (yyyy-MM-dd HH:mm):"));
         extendField = UI.field("2026-04-10 13:00");
         extendField.setPreferredSize(new Dimension(160, 32));
@@ -217,6 +231,26 @@ public class UserDashboardPanel extends JPanel {
         bookDAO.updateBooking(r);
         try { bookDAO.save(); } catch (Exception e) { e.printStackTrace(); }
         UI.setStatus(status, "Booking " + bkID + " cancelled.", false);
+        refreshBookings();
+    }
+
+    private void modifyBooking() {
+        int row = bookTable.getSelectedRow();
+        if (row < 0) { UI.setStatus(status, "Select a booking to modify.", true); return; }
+        String bkID = (String) bookModel.getValueAt(row, 0);
+        Reservation r = bookDAO.findByID(bkID);
+        if (r == null || !"CONFIRMED".equals(r.getStatus())) {
+            UI.setStatus(status, "Can only modify a CONFIRMED booking.", true); return;
+        }
+        String newStart = modifyStartField.getText().trim();
+        String newEnd   = modifyEndField.getText().trim();
+        if (newStart.isEmpty() || newEnd.isEmpty()) {
+            UI.setStatus(status, "Enter new start and end times.", true); return;
+        }
+        new ModifyCommand(svc, r, newStart, newEnd).execute();
+        bookDAO.updateBooking(r);
+        try { bookDAO.save(); } catch (Exception e) { e.printStackTrace(); }
+        UI.setStatus(status, "Booking " + bkID + " modified: " + newStart + " → " + newEnd, false);
         refreshBookings();
     }
 
