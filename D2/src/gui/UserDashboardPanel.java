@@ -15,8 +15,8 @@ public class UserDashboardPanel extends JPanel {
     private MainFrame frame;
     private User currentUser;
 
-    private EquipmentDAO equipDAO = new EquipmentDAO("data/equipment.csv");
-    private BookingDAO bookDAO    = new BookingDAO("data/bookings.csv");
+    private EquipmentDAO equipDAO = new EquipmentDAO("../data/equipment.csv");
+    private BookingDAO bookDAO    = new BookingDAO("../data/bookings.csv");
     private ReservationService svc = new ReservationService();
 
     private DefaultTableModel equipModel, bookModel;

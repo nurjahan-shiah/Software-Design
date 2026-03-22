@@ -16,9 +16,9 @@ public class ManagerDashboardPanel extends JPanel {
     private MainFrame frame;
     protected User currentUser;
 
-    protected EquipmentDAO equipDAO = new EquipmentDAO("data/equipment.csv");
-    protected UserDAO userDAO       = new UserDAO("data/users.csv");
-    protected BookingDAO bookDAO    = new BookingDAO("data/bookings.csv");
+    protected EquipmentDAO equipDAO = new EquipmentDAO("../data/equipment.csv");
+    protected UserDAO userDAO       = new UserDAO("../data/users.csv");
+    protected BookingDAO bookDAO    = new BookingDAO("../data/bookings.csv");
 
     protected DefaultTableModel equipModel, pendModel, bookModel;
     protected JTable equipTable, pendTable, bookTable;
