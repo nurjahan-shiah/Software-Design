@@ -1,15 +1,6 @@
 # EECS 3311 Software Design: YorkU Lab Equipment Reservation System
 
 **GitHub:** https://github.com/nurjahan-shiah/Software-Design
-
-| Member | Contribution |
-|---|---|
-| Nurjahan Ahmed Shiah |  |
-| Joseph Ajeigbe |  |
-| Jessica Buentipo |  |
-| David Ekeng |  |
-| Iyinoluwa Olu-Alabi | |
-
 ---
 
 ## Repository Structure
@@ -376,3 +367,13 @@ DAO Layer        data/
       ↓          CSV read/write via javacsv.jar
 CSV Storage      data/*.csv
 ```
+---
+
+D2 Contribution Table: [Code contribution can be found under the Contribution tab in GitHub]
+| Member | Contributions |
+|---|---|
+| Nurjahan Ahmed Shiah | D2 project structure (Models + CSV layer (model/, data/): User, Equipment, Reservation + all CSV read/write), GUI ×3, project setup, README, D2(1a[Justification for the Six Design Patterns], 1d[Component Diagram])|
+| David Ekeng | Implement UserFactory, Add & Clean up BookingSystem, Added all the Class diagrams (1b) |
+| Iyinoluwa Olu-Alabi | Implemented state pattern, command and strategy patterns ×2, strengthened/improved implementations |
+| Joseph Ajeigbe | Creating Observer.java, Documenting AI support into the report |
+| Jessica Buentipo | D2 (1c & 1e) |
