@@ -142,7 +142,7 @@ The login window will open. Use any of the test accounts below.
 
 ### VS Code Setup (optional)
 
-If you prefer developing in VS Code rather than the terminal:
+If you prefer developing in VS Code on Mac/Linux rather than the terminal:
 
 1. Install the **Extension Pack for Java** from the VS Code marketplace
 2. Open the `D2/` folder in VS Code: `File → Open Folder → select D2` (not the repo root, not `src/`)
@@ -160,8 +160,12 @@ If you prefer developing in VS Code rather than the terminal:
 ```
 
 4. If red squiggles appear on `com.csvreader` imports: `Ctrl+Shift+P` → **Java: Clean Java Language Server Workspace** → Restart
-5. To run from VS Code: open `src/gui/MainFrame.java` and press `F5`, or click the Run button above the `main` method
-
+5. If the red squiggles still appear: `Ctrl+Shift+P` → **Java: Configure classpath** then select `Libraries`, then `Add Library`.
+6. Follow the pop-up to select the javacsv.jar file in the project at `D2/lib/javacsv.jar`, then apply the changes.
+7. To run from VS Code: open `src/gui/MainFrame.java` and press `F5`, or click the Run button above the `main` method
+8. If the login screen shows consistently incorrect login details, go to  `D2\src\gui\`. Then edit the `LoginPanel.java` for the `csv file path` and replace it with your current file path.
+9. Repeat for `ManagerDashboardPanel.java` and `UserDashboardPanel.java` (Example look: `/Users/****/Desktop/Software-Design/D2/data/`).
+    
 > The red squiggles on CSV imports are a VS Code indexing issue only. The project compiles and runs correctly from the terminal regardless.
 
 ---
