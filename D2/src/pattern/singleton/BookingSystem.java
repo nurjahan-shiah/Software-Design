@@ -45,7 +45,8 @@ public class BookingSystem {
         Reservation booking;
         for (int i = 0; i < reservations.size(); i++) {
             booking = reservations.get(i);
-            LocalDateTime start = LocalDateTime.parse(booking.getStartTime());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            LocalDateTime start = LocalDateTime.parse(booking.getStartTime(), formatter);
             if (booking.getEquipmentID().equals(id) && LocalDateTime.now().isBefore(start)) {
 
                 if (booking.getStatus().equals("CANCELLED")) { reservations.remove(i); }
