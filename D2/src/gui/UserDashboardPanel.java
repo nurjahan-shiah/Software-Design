@@ -261,7 +261,8 @@ public class UserDashboardPanel extends JPanel {
         Reservation r = new Reservation(bkID, currentUser.getUserID(), eqID, start, end, pay, deposit);
         new ReserveCommand(svc, r).execute();
         bookDAO.addBooking(r);
-        BookingSystem.getInstance().addBooking(r);
+        BookingSystem bookingSystem = BookingSystem.getInstance();
+        bookingSystem.getInstance().addBooking(r);
         try { bookDAO.save(); } catch (Exception e) { e.printStackTrace(); }
 
         UI.setStatus(status, "✔ Reserved " + eqID + " | Booking: " + bkID + " | Deposit: $" + deposit + " via " + pay, false);
