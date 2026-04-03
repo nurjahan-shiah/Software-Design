@@ -1,0 +1,3 @@
+model.Reservation
+model.PaymentTransaction
+model.Equipment

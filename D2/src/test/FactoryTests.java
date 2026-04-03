@@ -1,14 +1,16 @@
 package test;
-import org.junit.Test;
 import static org.junit.Assert.*;
-import pattern.factory.*;
-import model.User;
-import model.Student; 
+
+import org.junit.Test;
+
 import model.Faculty;
 import model.Guest;
-import model.Researcher;
 import model.HeadLabCoordinator;
 import model.LabManager;
+import model.Researcher;
+import model.Student;
+import model.User;
+import pattern.factory.UserFactory;
 
 public class FactoryTests {
     UserFactory userFactory = new UserFactory();
