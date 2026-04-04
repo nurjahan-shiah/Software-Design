@@ -16,8 +16,7 @@ public class ManagerDashboardPanel extends JPanel {
     private MainFrame frame;
     protected User currentUser;
 
-    private static final String DATA = "C:/Users/nshia/Desktop/PEW/FW25-26/EECS3311/D2/LabReservationSystem/LabReservationSystem/Software-Design/D2/data/";
-    protected EquipmentDAO equipDAO = new EquipmentDAO(DATA + "equipment.csv");
+    private static final String DATA = System.getProperty("user.dir") + "/data/";    protected EquipmentDAO equipDAO = new EquipmentDAO(DATA + "equipment.csv");
     protected UserDAO userDAO       = new UserDAO(DATA + "users.csv");
     protected BookingDAO bookDAO    = new BookingDAO(DATA + "bookings.csv");
 

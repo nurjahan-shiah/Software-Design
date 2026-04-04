@@ -10,8 +10,7 @@ import pattern.factory.UserFactory;
 public class LoginPanel extends JPanel {
     private static final long serialVersionUID = 1L;
     private MainFrame frame;
-    private UserDAO userDAO = new UserDAO("C:/Users/nshia/Desktop/PEW/FW25-26/EECS3311/D2/LabReservationSystem/LabReservationSystem/Software-Design/D2/data/users.csv");
-    private JTextField emailField;
+    private UserDAO userDAO = new UserDAO(System.getProperty("user.dir") + "/data/users.csv");    private JTextField emailField;
     private JPasswordField passField;
     private JTextField regName, regEmail, regStaffID, regDept;
     private JPasswordField regPass;
