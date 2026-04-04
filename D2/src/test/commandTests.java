@@ -31,8 +31,7 @@ public class CommandTests {
 
     @Test
     public void cancelTest() {
-        CancelCommand cancelCommand = new CancelCommand(reservationService, reservation);
-        cancelCommand.execute();
+        new CancelCommand(reservationService, reservation).execute();
         assertEquals("CANCELLED", reservation.getStatus());
     }
 
@@ -60,12 +59,41 @@ public class CommandTests {
         assertEquals(equipmentID, reservation.getEquipmentID());
     }
 
+    @Test
+    public void cancel_userIDUnchanged() {
+        new CancelCommand(reservationService, reservation).execute();
+        assertEquals(userID, reservation.getUserID());
+    }
+
+    @Test
+    public void cancel_bookingIDUnchanged() {
+        new CancelCommand(reservationService, reservation).execute();
+        assertEquals(bookingID, reservation.getBookingID());
+    }
+
+    @Test
+    public void cancel_startTimeUnchanged() {
+        new CancelCommand(reservationService, reservation).execute();
+        assertEquals(startTime, reservation.getStartTime());
+    }
+
+    @Test
+    public void cancel_endTimeUnchanged() {
+        new CancelCommand(reservationService, reservation).execute();
+        assertEquals(endTime, reservation.getEndTime());
+    }
+
+    @Test
+    public void cancel_depositAmountUnchanged() {
+        new CancelCommand(reservationService, reservation).execute();
+        assertEquals(depositAmount, reservation.getDepositAmount(), 0.001);
+    }
+
     // ===================== ReserveCommand Tests =====================
 
     @Test
     public void reserveTest() {
-        ReserveCommand reserveCommand = new ReserveCommand(reservationService, reservation);
-        reserveCommand.execute();
+        new ReserveCommand(reservationService, reservation).execute();
         assertEquals("CONFIRMED", reservation.getStatus());
         assertFalse("CANCELLED".equals(reservation.getStatus()));
     }
@@ -92,6 +120,36 @@ public class CommandTests {
     public void reserve_notExtendedByDefault() {
         new ReserveCommand(reservationService, reservation).execute();
         assertFalse(reservation.isExtended());
+    }
+
+    @Test
+    public void reserve_userIDUnchanged() {
+        new ReserveCommand(reservationService, reservation).execute();
+        assertEquals(userID, reservation.getUserID());
+    }
+
+    @Test
+    public void reserve_startTimeUnchanged() {
+        new ReserveCommand(reservationService, reservation).execute();
+        assertEquals(startTime, reservation.getStartTime());
+    }
+
+    @Test
+    public void reserve_endTimeUnchanged() {
+        new ReserveCommand(reservationService, reservation).execute();
+        assertEquals(endTime, reservation.getEndTime());
+    }
+
+    @Test
+    public void reserve_paymentMethodUnchanged() {
+        new ReserveCommand(reservationService, reservation).execute();
+        assertEquals(paymentMethod, reservation.getPaymentMethod());
+    }
+
+    @Test
+    public void reserve_depositAmountUnchanged() {
+        new ReserveCommand(reservationService, reservation).execute();
+        assertEquals(depositAmount, reservation.getDepositAmount(), 0.001);
     }
 
     // ===================== ExtendCommand Tests =====================
@@ -122,6 +180,36 @@ public class CommandTests {
         new ExtendCommand(reservationService, reservation, "2026-03-10 14:00").execute();
         new ExtendCommand(reservationService, reservation, "2026-03-10 16:00").execute();
         assertEquals("2026-03-10 16:00", reservation.getEndTime());
+    }
+
+    @Test
+    public void extend_equipmentIDUnchanged() {
+        new ExtendCommand(reservationService, reservation, "2026-03-10 15:00").execute();
+        assertEquals(equipmentID, reservation.getEquipmentID());
+    }
+
+    @Test
+    public void extend_bookingIDUnchanged() {
+        new ExtendCommand(reservationService, reservation, "2026-03-10 15:00").execute();
+        assertEquals(bookingID, reservation.getBookingID());
+    }
+
+    @Test
+    public void extend_userIDUnchanged() {
+        new ExtendCommand(reservationService, reservation, "2026-03-10 15:00").execute();
+        assertEquals(userID, reservation.getUserID());
+    }
+
+    @Test
+    public void extend_depositAmountUnchanged() {
+        new ExtendCommand(reservationService, reservation, "2026-03-10 15:00").execute();
+        assertEquals(depositAmount, reservation.getDepositAmount(), 0.001);
+    }
+
+    @Test
+    public void extend_statusUnchanged() {
+        new ExtendCommand(reservationService, reservation, "2026-03-10 15:00").execute();
+        assertEquals("CONFIRMED", reservation.getStatus());
     }
 
     // ===================== ModifyCommand Tests =====================
@@ -156,12 +244,42 @@ public class CommandTests {
         assertEquals(equipmentID, reservation.getEquipmentID());
     }
 
+    @Test
+    public void modify_userIDUnchanged() {
+        new ModifyCommand(reservationService, reservation,
+                "2026-03-10 11:00", "2026-03-10 13:00").execute();
+        assertEquals(userID, reservation.getUserID());
+    }
+
+    @Test
+    public void modify_depositAmountUnchanged() {
+        new ModifyCommand(reservationService, reservation,
+                "2026-03-10 11:00", "2026-03-10 13:00").execute();
+        assertEquals(depositAmount, reservation.getDepositAmount(), 0.001);
+    }
+
+    @Test
+    public void modify_depositNotForfeited() {
+        new ModifyCommand(reservationService, reservation,
+                "2026-03-10 11:00", "2026-03-10 13:00").execute();
+        assertFalse(reservation.isDepositForfeited());
+    }
+
+    @Test
+    public void modify_twice_secondValuesKept() {
+        new ModifyCommand(reservationService, reservation,
+                "2026-03-10 10:00", "2026-03-10 13:00").execute();
+        new ModifyCommand(reservationService, reservation,
+                "2026-03-10 11:00", "2026-03-10 14:00").execute();
+        assertEquals("2026-03-10 11:00", reservation.getStartTime());
+        assertEquals("2026-03-10 14:00", reservation.getEndTime());
+    }
+
     // ===================== ForfeitDepositCommand Tests =====================
 
     @Test
     public void forfeitDepositTest() {
-        ForfeitDepositCommand forfeitCommand = new ForfeitDepositCommand(reservationService, reservation);
-        forfeitCommand.execute();
+        new ForfeitDepositCommand(reservationService, reservation).execute();
         assertEquals("FORFEITED", reservation.getStatus());
         assertTrue(reservation.isDepositForfeited());
         assertFalse("CANCELLED".equals(reservation.getStatus()));
@@ -180,19 +298,35 @@ public class CommandTests {
         assertEquals(depositAmount, reservation.getDepositAmount(), 0.001);
     }
 
-    // ===================== Extended Workflow Tests =====================
+    @Test
+    public void forfeit_bookingIDUnchanged() {
+        new ForfeitDepositCommand(reservationService, reservation).execute();
+        assertEquals(bookingID, reservation.getBookingID());
+    }
+
+    @Test
+    public void forfeit_userIDUnchanged() {
+        new ForfeitDepositCommand(reservationService, reservation).execute();
+        assertEquals(userID, reservation.getUserID());
+    }
+
+    @Test
+    public void forfeit_startTimeUnchanged() {
+        new ForfeitDepositCommand(reservationService, reservation).execute();
+        assertEquals(startTime, reservation.getStartTime());
+    }
+
+    // ===================== Workflow / Integration Tests =====================
 
     @Test
     public void extendAndModifyTest() {
         new ReserveCommand(reservationService, reservation).execute();
-        String newEndTime = "2026-03-10 13:30";
-        new ExtendCommand(reservationService, reservation, newEndTime).execute();
-        assertEquals(newEndTime, reservation.getEndTime());
-        String newStart = "2026-03-10 11:30";
-        String newEnd = "2026-03-10 14:30";
-        new ModifyCommand(reservationService, reservation, newStart, newEnd).execute();
-        assertEquals(newStart, reservation.getStartTime());
-        assertEquals(newEnd, reservation.getEndTime());
+        new ExtendCommand(reservationService, reservation, "2026-03-10 13:30").execute();
+        assertEquals("2026-03-10 13:30", reservation.getEndTime());
+        new ModifyCommand(reservationService, reservation,
+                "2026-03-10 11:30", "2026-03-10 14:30").execute();
+        assertEquals("2026-03-10 11:30", reservation.getStartTime());
+        assertEquals("2026-03-10 14:30", reservation.getEndTime());
     }
 
     @Test
@@ -208,6 +342,36 @@ public class CommandTests {
         new ForfeitDepositCommand(reservationService, reservation).execute();
         assertEquals("FORFEITED", reservation.getStatus());
         assertTrue(reservation.isDepositForfeited());
+    }
+
+    @Test
+    public void reserve_thenModify_thenCancel() {
+        new ReserveCommand(reservationService, reservation).execute();
+        new ModifyCommand(reservationService, reservation,
+                "2026-03-10 10:00", "2026-03-10 13:00").execute();
+        new CancelCommand(reservationService, reservation).execute();
+        assertEquals("CANCELLED", reservation.getStatus());
+        assertEquals("2026-03-10 10:00", reservation.getStartTime());
+    }
+
+    @Test
+    public void reserve_thenExtend_thenForfeit() {
+        new ReserveCommand(reservationService, reservation).execute();
+        new ExtendCommand(reservationService, reservation, "2026-03-10 15:00").execute();
+        new ForfeitDepositCommand(reservationService, reservation).execute();
+        assertEquals("FORFEITED", reservation.getStatus());
+        assertTrue(reservation.isExtended());
+        assertEquals("2026-03-10 15:00", reservation.getEndTime());
+    }
+
+    @Test
+    public void differentReservations_independentState() {
+        Reservation r2 = new Reservation("BK002", "user02", "EQU002",
+                "2026-04-01 09:00", "2026-04-01 11:00", "DEBIT", 15.0);
+        new ReserveCommand(reservationService, reservation).execute();
+        new CancelCommand(reservationService, r2).execute();
+        assertEquals("CONFIRMED", reservation.getStatus());
+        assertEquals("CANCELLED", r2.getStatus());
     }
 
     // ===================== ReservationService Direct Tests =====================
@@ -243,5 +407,29 @@ public class CommandTests {
         reservationService.forfeitDeposit(reservation);
         assertEquals("FORFEITED", reservation.getStatus());
         assertTrue(reservation.isDepositForfeited());
+    }
+
+    @Test
+    public void service_modify_doesNotChangeStatus() {
+        reservationService.modify(reservation, "2026-04-01 08:00", "2026-04-01 10:00");
+        assertEquals("CONFIRMED", reservation.getStatus());
+    }
+
+    @Test
+    public void service_extend_doesNotChangeStatus() {
+        reservationService.extend(reservation, "2026-03-10 18:00");
+        assertEquals("CONFIRMED", reservation.getStatus());
+    }
+
+    @Test
+    public void service_reserve_doesNotForfeitDeposit() {
+        reservationService.reserve(reservation);
+        assertFalse(reservation.isDepositForfeited());
+    }
+
+    @Test
+    public void service_cancel_doesNotForfeitDeposit() {
+        reservationService.cancel(reservation);
+        assertFalse(reservation.isDepositForfeited());
     }
 }
