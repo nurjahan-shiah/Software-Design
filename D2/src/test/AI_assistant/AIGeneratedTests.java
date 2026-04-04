@@ -1,4 +1,4 @@
-package test;
+package test.AI_assistant;
 
 import static org.junit.Assert.*;
 import org.junit.Before;
