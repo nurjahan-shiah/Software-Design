@@ -13,7 +13,9 @@ public class StrategyTests {
 
     @Before
     public void setUp() {
+        // Start with DECLINED so we can detect when setPaymentStatus("SUCCESS") is called
         transaction = new PaymentTransaction("TXN001", "BK001", 100.0, "CREDIT");
+        transaction.setPaymentStatus("DECLINED");
     }
 
     // ===================== CreditCardPayment Tests =====================
@@ -27,8 +29,9 @@ public class StrategyTests {
     @Test
     public void testCreditCardPaymentSetsSuccess() {
         CreditCardPayment strategy = new CreditCardPayment();
+        assertEquals("DECLINED", transaction.getPaymentStatus()); // verify starting state
         strategy.pay(transaction);
-        assertEquals("SUCCESS", transaction.getPaymentStatus());
+        assertEquals("SUCCESS", transaction.getPaymentStatus()); // verify it changed
     }
 
     @Test
@@ -36,6 +39,14 @@ public class StrategyTests {
         CreditCardPayment strategy = new CreditCardPayment();
         strategy.pay(transaction);
         assertEquals(100.0, transaction.getTotalAmount(), 0.001);
+    }
+
+    @Test
+    public void testCreditCardPaymentChangesStatusFromDeclined() {
+        transaction.setPaymentStatus("DECLINED");
+        new CreditCardPayment().pay(transaction);
+        assertNotEquals("DECLINED", transaction.getPaymentStatus());
+        assertEquals("SUCCESS", transaction.getPaymentStatus());
     }
 
     // ===================== DebitPayment Tests =====================
@@ -48,16 +59,23 @@ public class StrategyTests {
 
     @Test
     public void testDebitPaymentSetsSuccess() {
-        DebitPayment strategy = new DebitPayment();
-        strategy.pay(transaction);
+        assertEquals("DECLINED", transaction.getPaymentStatus());
+        new DebitPayment().pay(transaction);
         assertEquals("SUCCESS", transaction.getPaymentStatus());
     }
 
     @Test
     public void testDebitPaymentAmount() {
-        DebitPayment strategy = new DebitPayment();
-        strategy.pay(transaction);
+        new DebitPayment().pay(transaction);
         assertEquals(100.0, transaction.getTotalAmount(), 0.001);
+    }
+
+    @Test
+    public void testDebitPaymentChangesStatusFromDeclined() {
+        transaction.setPaymentStatus("DECLINED");
+        new DebitPayment().pay(transaction);
+        assertNotEquals("DECLINED", transaction.getPaymentStatus());
+        assertEquals("SUCCESS", transaction.getPaymentStatus());
     }
 
     // ===================== GrantPayment Tests =====================
@@ -70,16 +88,23 @@ public class StrategyTests {
 
     @Test
     public void testGrantPaymentSetsSuccess() {
-        GrantPayment strategy = new GrantPayment();
-        strategy.pay(transaction);
+        assertEquals("DECLINED", transaction.getPaymentStatus());
+        new GrantPayment().pay(transaction);
         assertEquals("SUCCESS", transaction.getPaymentStatus());
     }
 
     @Test
     public void testGrantPaymentBookingID() {
-        GrantPayment strategy = new GrantPayment();
-        strategy.pay(transaction);
+        new GrantPayment().pay(transaction);
         assertEquals("BK001", transaction.getBookingID());
+    }
+
+    @Test
+    public void testGrantPaymentChangesStatusFromDeclined() {
+        transaction.setPaymentStatus("DECLINED");
+        new GrantPayment().pay(transaction);
+        assertNotEquals("DECLINED", transaction.getPaymentStatus());
+        assertEquals("SUCCESS", transaction.getPaymentStatus());
     }
 
     // ===================== InstitutionalPayment Tests =====================
@@ -92,16 +117,23 @@ public class StrategyTests {
 
     @Test
     public void testInstitutionalPaymentSetsSuccess() {
-        InstitutionalPayment strategy = new InstitutionalPayment();
-        strategy.pay(transaction);
+        assertEquals("DECLINED", transaction.getPaymentStatus());
+        new InstitutionalPayment().pay(transaction);
         assertEquals("SUCCESS", transaction.getPaymentStatus());
     }
 
     @Test
     public void testInstitutionalPaymentBookingID() {
-        InstitutionalPayment strategy = new InstitutionalPayment();
-        strategy.pay(transaction);
+        new InstitutionalPayment().pay(transaction);
         assertEquals("BK001", transaction.getBookingID());
+    }
+
+    @Test
+    public void testInstitutionalPaymentChangesStatusFromDeclined() {
+        transaction.setPaymentStatus("DECLINED");
+        new InstitutionalPayment().pay(transaction);
+        assertNotEquals("DECLINED", transaction.getPaymentStatus());
+        assertEquals("SUCCESS", transaction.getPaymentStatus());
     }
 
     // ===================== PaymentProcessor Tests =====================
@@ -154,5 +186,42 @@ public class StrategyTests {
         PaymentProcessor processor = new PaymentProcessor(null);
         processor.setPaymentStrategy(new CreditCardPayment());
         assertTrue(processor.processPayment(transaction));
+        assertEquals("SUCCESS", transaction.getPaymentStatus());
+    }
+
+    @Test
+    public void testPaymentProcessorNullKeepsDeclined() {
+        transaction.setPaymentStatus("DECLINED");
+        PaymentProcessor processor = new PaymentProcessor(null);
+        processor.processPayment(transaction);
+        assertEquals("DECLINED", transaction.getPaymentStatus());
+    }
+
+    @Test
+    public void testProcessorCreditChangesFromDeclined() {
+        transaction.setPaymentStatus("DECLINED");
+        new PaymentProcessor(new CreditCardPayment()).processPayment(transaction);
+        assertEquals("SUCCESS", transaction.getPaymentStatus());
+    }
+
+    @Test
+    public void testProcessorDebitChangesFromDeclined() {
+        transaction.setPaymentStatus("DECLINED");
+        new PaymentProcessor(new DebitPayment()).processPayment(transaction);
+        assertEquals("SUCCESS", transaction.getPaymentStatus());
+    }
+
+    @Test
+    public void testProcessorGrantChangesFromDeclined() {
+        transaction.setPaymentStatus("DECLINED");
+        new PaymentProcessor(new GrantPayment()).processPayment(transaction);
+        assertEquals("SUCCESS", transaction.getPaymentStatus());
+    }
+
+    @Test
+    public void testProcessorInstitutionalChangesFromDeclined() {
+        transaction.setPaymentStatus("DECLINED");
+        new PaymentProcessor(new InstitutionalPayment()).processPayment(transaction);
+        assertEquals("SUCCESS", transaction.getPaymentStatus());
     }
 }

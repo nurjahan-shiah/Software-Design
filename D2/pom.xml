@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>yorku.eecs3311</groupId>
+    <artifactId>lab-reservation-system</artifactId>
+    <version>1.0</version>
+    <packaging>jar</packaging>
+
+    <properties>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>local-lib</id>
+            <url>file://${project.basedir}/lib-repo</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>net.sourceforge.javacsv</groupId>
+            <artifactId>javacsv</artifactId>
+            <version>2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <!-- Main source: only non-test, non-gui code -->
+        <sourceDirectory>src</sourceDirectory>
+        <!-- Test source: test folder only -->
+        <testSourceDirectory>src/test</testSourceDirectory>
+
+        <plugins>
+
+            <!-- Compiler: exclude gui, Main, and test folder from main compile -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+                    <excludes>
+                        <exclude>gui/**</exclude>
+                        <exclude>Main.java</exclude>
+                        <exclude>test/**</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+
+            <!-- Surefire: run all test classes except randoop -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.1.2</version>
+                <configuration>
+                    <excludes>
+                        <exclude>randoop/**</exclude>
+                        <exclude>AI_assistant/**</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+
+            <!-- PITest -->
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <version>1.15.3</version>
+                <configuration>
+                    <targetClasses>
+                        <param>model.Deposit</param>
+                        <param>model.Equipment</param>
+                        <param>model.Faculty</param>
+                        <param>model.Guest</param>
+                        <param>model.HeadLabCoordinator</param>
+                        <param>model.LabLocation</param>
+                        <param>model.LabManager</param>
+                        <param>model.PaymentTransaction</param>
+                        <param>model.Researcher</param>
+                        <param>model.Reservation</param>
+                        <param>model.Student</param>
+                        <param>pattern.command.CancelCommand</param>
+                        <param>pattern.command.ExtendCommand</param>
+                        <param>pattern.command.ForfeitDepositCommand</param>
+                        <param>pattern.command.ModifyCommand</param>
+                        <param>pattern.command.ReservationService</param>
+                        <param>pattern.command.ReserveCommand</param>
+                        <param>pattern.factory.UserFactory</param>
+                        <param>pattern.observer.UserNotificationObserver</param>
+                        <param>pattern.singleton.BookingSystem</param>
+                        <param>pattern.singleton.HeadLabCoordinatorSingleton</param>
+                        <param>pattern.state.AvailableState</param>
+                        <param>pattern.state.DisabledState</param>
+                        <param>pattern.state.EquipmentContext</param>
+                        <param>pattern.state.MaintenanceState</param>
+                        <param>pattern.strategy.CreditCardPayment</param>
+                        <param>pattern.strategy.DebitPayment</param>
+                        <param>pattern.strategy.GrantPayment</param>
+                        <param>pattern.strategy.InstitutionalPayment</param>
+                        <param>pattern.strategy.PaymentProcessor</param>
+                    </targetClasses>
+                    <targetTests>
+                        <param>test.BookingSystemTests</param>
+                        <param>test.CommandTests</param>
+                        <param>test.ExtraCoverageTests</param>
+                        <param>test.FactoryTests</param>
+                        <param>test.ModelTests</param>
+                        <param>test.ObserverTests</param>
+                        <param>test.SingletonCoordinatorTests</param>
+                        <param>test.StateTests</param>
+                        <param>test.StrategyTests</param>
+                        <param>test.AIGeneratedTests</param>
+                    </targetTests>
+                    <outputFormats>
+                        <outputFormat>HTML</outputFormat>
+                        <outputFormat>XML</outputFormat>
+                    </outputFormats>
+                    <failWhenNoMutations>false</failWhenNoMutations>
+                    <verbose>true</verbose>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>
