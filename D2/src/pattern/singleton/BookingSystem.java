@@ -43,17 +43,16 @@ public class BookingSystem {
     }
 
     public void cancelFutureBookings(String id) {
-        Reservation booking;
-        for (int i = 0; i < reservations.size(); i++) {
-            booking = reservations.get(i);
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-            LocalDateTime start = LocalDateTime.parse(booking.getStartTime(), formatter);
-            if (booking.getEquipmentID().equals(id) && LocalDateTime.now().isBefore(start)) {
-
-                if (booking.getStatus().equals("CANCELLED")) { reservations.remove(i); }
-                return;
-            }
+    Reservation booking;
+    for (int i = 0; i < reservations.size(); i++) {
+        booking = reservations.get(i);
+        if (booking.getStartTime() == null) continue;   // ← ADD THIS LINE
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime start = LocalDateTime.parse(booking.getStartTime(), formatter);
+        if (booking.getEquipmentID().equals(id) && LocalDateTime.now().isBefore(start)) {
+            if (booking.getStatus().equals("CANCELLED")) { reservations.remove(i); }
+            return;
         }
     }
-
+}
 }
