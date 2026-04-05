@@ -46,7 +46,7 @@ public class BookingSystem {
     Reservation booking;
     for (int i = 0; i < reservations.size(); i++) {
         booking = reservations.get(i);
-        if (booking.getStartTime() == null) continue;   // ← ADD THIS LINE
+        if (booking.getStartTime() == null) continue;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime start = LocalDateTime.parse(booking.getStartTime(), formatter);
         if (booking.getEquipmentID().equals(id) && LocalDateTime.now().isBefore(start)) {
@@ -54,5 +54,5 @@ public class BookingSystem {
             return;
         }
     }
-}
+ }
 }
