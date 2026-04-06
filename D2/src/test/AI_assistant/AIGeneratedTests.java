@@ -102,6 +102,40 @@ public class AIGeneratedTests {
         assertEquals(0.0, factory.getUserType("MANAGER").getFeeRate(), 0.001);
     }
 
+    @Test
+    public void aiTest_coordinatorFeeRateIsZero() {
+        UserFactory factory = new UserFactory();
+        assertEquals(0.0, factory.getUserType("COORDINATOR").getFeeRate(), 0.001);
+    }
+
+    @Test
+    public void aiTest_factoryUnknownTypeReturnsNull() {
+        UserFactory factory = new UserFactory();
+        assertNull(factory.getUserType("UNKNOWN_TYPE"));
+    }
+
+    @Test
+    public void aiTest_factoryEmptyStringReturnsNull() {
+        UserFactory factory = new UserFactory();
+        assertNull(factory.getUserType(""));
+    }
+
+    @Test
+    public void aiTest_factoryTwoStudents_areDistinct() {
+        UserFactory factory = new UserFactory();
+        User s1 = factory.getUserType("STUDENT");
+        User s2 = factory.getUserType("STUDENT");
+        assertNotSame(s1, s2);
+    }
+
+    @Test
+    public void aiTest_factoryTwoGuests_areDistinct() {
+        UserFactory factory = new UserFactory();
+        User g1 = factory.getUserType("GUEST");
+        User g2 = factory.getUserType("GUEST");
+        assertNotSame(g1, g2);
+    }
+
     // ===================== Singleton - BookingSystem Tests =====================
 
     @Test
@@ -421,5 +455,62 @@ public class AIGeneratedTests {
         processor.setPaymentStrategy(new DebitPayment());
         assertTrue(processor.processPayment(txn));
         assertEquals("SUCCESS", txn.getPaymentStatus());
+    }
+
+    // ===================== Additional Model Tests =====================
+
+    @Test
+    public void aiTest_reservationDefaultConstructor_noStatus() {
+        Reservation r = new Reservation();
+        assertNull(r.getBookingID());
+        assertNull(r.getStatus());
+    }
+
+    @Test
+    public void aiTest_reservationSetAndGetUserID() {
+        Reservation r = new Reservation();
+        r.setUserID("USR999");
+        assertEquals("USR999", r.getUserID());
+    }
+
+    @Test
+    public void aiTest_reservationNotExtendedByDefault() {
+        Reservation r = new Reservation("BK010", "USR001", "EQU001",
+                "2026-06-01 09:00", "2026-06-01 11:00", "CREDIT", 25.0);
+        assertFalse(r.isExtended());
+    }
+
+    @Test
+    public void aiTest_reservationNotForfeitedByDefault() {
+        Reservation r = new Reservation("BK011", "USR001", "EQU001",
+                "2026-06-01 09:00", "2026-06-01 11:00", "CREDIT", 25.0);
+        assertFalse(r.isDepositForfeited());
+    }
+
+    @Test
+    public void aiTest_reservationCancel_setsCancelled() {
+        Reservation r = new Reservation("BK012", "USR001", "EQU001",
+                "2026-06-01 09:00", "2026-06-01 11:00", "CREDIT", 25.0);
+        r.cancel();
+        assertEquals("CANCELLED", r.getStatus());
+    }
+
+    @Test
+    public void aiTest_reservationToString_containsBookingID() {
+        Reservation r = new Reservation("BK013", "USR001", "EQU001",
+                "2026-06-01 09:00", "2026-06-01 11:00", "CREDIT", 25.0);
+        assertTrue(r.toString().contains("BK013"));
+    }
+
+    @Test
+    public void aiTest_equipmentContextGetEquipmentID() {
+        EquipmentContext ctx = new EquipmentContext("AI_VERIFY_001", "AVAILABLE");
+        assertEquals("AI_VERIFY_001", ctx.getEquipmentID());
+    }
+
+    @Test
+    public void aiTest_equipmentContextUnknownStatusDefaultsAvailable() {
+        EquipmentContext ctx = new EquipmentContext("AI_EQU099", "INVALID_STATUS");
+        assertEquals("AVAILABLE", ctx.getStatusString());
     }
 }
