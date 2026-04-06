@@ -1,0 +1,14 @@
+{
+    "java.project.sourcePaths": [
+        "D2\\src"
+    ],
+    "java.project.referencedLibraries": [
+        "D2\\lib\\covered-class-4.2.1.jar",
+        "D2\\lib\\randoop-all-4.2.1.jar",
+        "D2\\lib\\replacecall-4.2.1.jar",
+        "c:\\Users\\nurja\\Downloads\\eecs3311\\project\\Software-Design\\D2\\lib\\javacsv.jar",
+        "c:\\Users\\nurja\\Downloads\\eecs3311\\project\\Software-Design\\D2\\lib\\randoop-all-4.3.4.jar",
+        "c:\\Users\\nurja\\Downloads\\eecs3311\\project\\Software-Design\\D2\\lib\\hamcrest-core-1.3.jar",
+        "c:\\Users\\nurja\\Downloads\\eecs3311\\project\\Software-Design\\D2\\lib\\junit-4.13.2.jar"
+    ]
+}
